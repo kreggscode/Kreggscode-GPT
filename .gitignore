@@ -42,3 +42,10 @@ generated/
 # OS
 .DS_Store
 Thumbs.db
+
+# Personal scripts - don't push to GitHub
+push_*.bat
+git_push.bat
+final_push.bat
+restore_banner.bat
+CHECK_PYTHON.bat
