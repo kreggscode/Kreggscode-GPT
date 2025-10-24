@@ -103,6 +103,7 @@ Always be helpful and respond in the same language as the user's input."""
             ("copy", "Copy last code block to clipboard"),
             ("copy <n>", "Copy specific code block number"),
             ("files", "List all generated files"),
+            ("open", "Open generated files folder"),
             ("clean", "Delete all generated files"),
             ("temp <value>", "Set AI temperature (0.0-3.0)"),
             ("model <name>", "Change AI model"),
@@ -190,9 +191,31 @@ Always be helpful and respond in the same language as the user's input."""
             if files:
                 self.console.print(f"\n[bold cyan]Generated Files ({len(files)}):[/bold cyan]")
                 for i, filepath in enumerate(files, 1):
-                    self.console.print(f"  {i}. [yellow]{filepath}[/yellow]")
+                    import os
+                    self.console.print(f"  {i}. [yellow]{os.path.abspath(filepath)}[/yellow]")
             else:
                 self.console.print("[dim]No files generated yet.[/dim]")
+            return True
+        
+        elif command == 'open':
+            import os
+            import subprocess
+            import platform
+            
+            folder_path = os.path.abspath(self.file_manager.output_dir)
+            
+            try:
+                if platform.system() == 'Windows':
+                    os.startfile(folder_path)
+                elif platform.system() == 'Darwin':  # macOS
+                    subprocess.run(['open', folder_path])
+                else:  # Linux
+                    subprocess.run(['xdg-open', folder_path])
+                
+                self.console.print(f"[green]✓[/green] Opened folder: [yellow]{folder_path}[/yellow]", style="bold")
+            except Exception as e:
+                self.console.print(f"[yellow]⚠[/yellow] Could not open folder automatically.", style="bold")
+                self.console.print(f"[white]Location:[/white] [yellow]{folder_path}[/yellow]")
             return True
         
         elif command == 'clean':
@@ -289,9 +312,19 @@ Always be helpful and respond in the same language as the user's input."""
                 saved_files = self.file_manager.process_ai_response(response, user_input)
                 
                 if saved_files:
-                    self.console.print(f"\n[green]✓[/green] [bold]File(s) saved:[/bold]")
-                    for filepath in saved_files:
-                        self.console.print(f"  → [yellow]{filepath}[/yellow]")
+                    # Show prominent file save notification
+                    import os
+                    files_panel = Panel(
+                        "\n".join([
+                            f"[bold green]✓ File #{i} saved successfully![/bold green]",
+                            f"[white]Location:[/white] [yellow]{os.path.abspath(filepath)}[/yellow]",
+                            f"[dim]You can open this file in any editor[/dim]"
+                        ] for i, filepath in enumerate(saved_files, 1)),
+                        title="[bold green]💾 Files Saved to Your Computer[/bold green]",
+                        border_style="green",
+                        box=box.DOUBLE
+                    )
+                    self.console.print(files_panel)
             
             except KeyboardInterrupt:
                 self.console.print("\n\n[yellow]Interrupted. Type 'exit' to quit.[/yellow]")
