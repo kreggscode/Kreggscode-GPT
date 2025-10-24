@@ -207,25 +207,18 @@ class FileManager:
         """
         saved_files = []
         
-        # Check if user requested file creation
-        if not self.detect_file_request(user_request):
-            return saved_files
-        
-        # Extract code blocks
+        # Extract code blocks - ALWAYS save if code blocks are present
         code_blocks = self.extract_code_blocks(response)
         
         if not code_blocks:
-            # No code blocks found, try to save entire response
-            # Extract filename from user request if possible
-            filename = self._extract_filename_from_request(user_request)
-            filepath = self.save_file(response, filename)
+            # No code blocks found - don't save anything
+            return saved_files
+        
+        # Save each code block automatically
+        for lang, code, filename_hint in code_blocks:
+            filename = filename_hint or self._extract_filename_from_request(user_request)
+            filepath = self.save_file(code, filename, lang)
             saved_files.append(filepath)
-        else:
-            # Save each code block
-            for lang, code, filename_hint in code_blocks:
-                filename = filename_hint or self._extract_filename_from_request(user_request)
-                filepath = self.save_file(code, filename, lang)
-                saved_files.append(filepath)
         
         return saved_files
     

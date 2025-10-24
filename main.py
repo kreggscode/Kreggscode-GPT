@@ -74,10 +74,8 @@ Always be helpful and respond in the same language as the user's input."""
         
         self.console.print()
         for line in banner_lines:
-            # Center each line based on terminal width
-            padding = (width - len(line)) // 2
-            centered_line = " " * max(0, padding) + line
-            self.console.print(centered_line, style="bold cyan", overflow="ignore")
+            # Use justify="center" for proper centering
+            self.console.print(line, style="bold cyan", justify="center", overflow="ignore")
         self.console.print()
         
         # Welcome message
