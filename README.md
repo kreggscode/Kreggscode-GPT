@@ -18,8 +18,9 @@
 
 ## ✨ Features
 
-- 🎨 **Beautiful CLI Interface** - Professional blue color scheme with clean design
+- 🎨 **Beautiful CLI Interface** - Professional cyan color scheme with stunning ASCII banner
 - 🤖 **AI-Powered Conversations** - Natural language interactions with advanced AI
+- 📋 **Copy to Clipboard** - Instantly copy code blocks with the `copy` command
 - 🌍 **Multi-Language Support** - Automatically detects and responds in 50+ languages
 - 📁 **Smart File Generation** - Creates and saves code files automatically
 - 💻 **Cross-Platform** - Works seamlessly on Windows, Linux, and macOS
@@ -140,6 +141,8 @@ Once the application is running, you can use these commands:
 | Command | Description |
 |---------|-------------|
 | `help` | Show all available commands |
+| `copy` | Copy last code block to clipboard |
+| `copy <n>` | Copy specific code block (e.g., `copy 1`, `copy 2`) |
 | `clear` | Clear conversation history |
 | `files` | List all generated files |
 | `clean` | Delete all generated files |
@@ -177,7 +180,7 @@ simplicity and readability. It's widely used for web development, data
 science, automation, and more.
 ```
 
-### 2. Generate Code Files
+### 2. Generate Code Files with Copy Feature
 
 ```
 You: Create a Python file called hello.py that prints "Hello World"
@@ -190,7 +193,18 @@ Here's your Python file:
 print("Hello World")
 ```
 
+╭─────────── Copy to Clipboard ───────────╮
+│ 📋 1 code block(s) ready to copy!      │
+│                                         │
+│ Type 'copy' to copy the last block     │
+│ Type 'copy 1', 'copy 2', etc. for      │
+│ specific blocks                         │
+╰─────────────────────────────────────────╯
+
 ✓ File saved: generated/hello.py
+
+You: copy
+✓ Code block copied to clipboard! (45 characters)
 ```
 
 ### 3. Multi-Language Support
